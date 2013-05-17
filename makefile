@@ -1,7 +1,10 @@
 CC=g++
 CFLAGS=-c
 LDFLAGS=
-SOURCES= main.cpp
+SOURCES= main.cpp \
+		 file.cpp \
+		 list.cpp \
+		 huffman.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE= hw6
 
