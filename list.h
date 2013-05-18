@@ -5,15 +5,26 @@ struct chTable;
 
 struct listNode
 {
-	chTable   data;
+	chTable* data;
 	listNode* next;
-}
+};
 
 struct List
 {
 	int size;
 	listNode* front;
 	listNode* back;
-}
+};
+
+List* createList ();
+void destroyList (List* list);
+bool isEmpty (List* list);
+int getSize (List* list);
+chTable* getFront (List* list);
+void addBack (List* list, chTable node);
+void addFront (List* list, chTable node);
+void insert (List* list, chTable node, int position);
+void removeFront (List* list);
+void removeBack(List* list);
 
 #endif

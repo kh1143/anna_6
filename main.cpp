@@ -1,6 +1,9 @@
 #include <string>
 #include <iostream>
 #include <stdlib.h>
+#include "list.h"
+#include "file.h"
+#include "huffman.h"
 
 using namespace std;
 

@@ -5,6 +5,6 @@ struct chTable
 {
 	char ch;
 	int frequency;
-}
+};
 
 #endif
