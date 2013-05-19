@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <assert.h>
 #include "list.h"
 
 using namespace std;
@@ -15,7 +16,7 @@ List* createList ()
 
 void destroyList (List* list)
 {
-	if (!list) return;
+	assert (list);
 
 	while(!isEmpty(list))
 		removeFront(list);
@@ -25,26 +26,26 @@ void destroyList (List* list)
 
 bool isEmpty (List* list)
 {
-	if (!list) return false;
+	assert (list);
 	return list->size == 0;
 }
 
 int getSize (List* list)
 {
-	if (!list) return -1;
+	assert (list);
 	return list->size;
 }
 
 chTable* getFront (List* list)
 {
-	if (!list) return NULL;
+	assert (list);
 	return list->front->data;
 }
 
 void addBack (List* list, chTable* node)
 {
-	if (!list) return;
-	listNode* n = new listNode;
+	assert (list);
+	ListNode* n = new ListNode;
 	n->data = node;
 	n->next = NULL;
 
@@ -63,8 +64,8 @@ void addBack (List* list, chTable* node)
 
 void addFront (List* list, chTable* node)
 {
-	if (!list) return;
-	listNode* n = new listNode;
+	assert (list);
+	ListNode* n = new ListNode;
 	n->data = node;
 
 	if (isEmpty(list))
@@ -82,7 +83,7 @@ void addFront (List* list, chTable* node)
 
 void insert (List* list, chTable* node, int position)
 {
-	if (!list) return;
+	assert (list);
 	if (isEmpty(list) || position == 0)
 	{
 		addFront (list, node);
@@ -93,8 +94,8 @@ void insert (List* list, chTable* node, int position)
 	}
 	else
 	{
-		listNode* n = new listNode;
-		listNode* tmp = list->front;
+		ListNode* n = new ListNode;
+		ListNode* tmp = list->front;
 
 		n->data = node;
 		
@@ -108,8 +109,8 @@ void insert (List* list, chTable* node, int position)
 
 void removeFront (List* list)
 {
-	if (!list) return;
-	listNode* tmp = list->front;
+	assert (list);
+	ListNode* tmp = list->front;
 	tmp = tmp->next;
 	delete list->front;
 	list->front = tmp;
@@ -118,8 +119,8 @@ void removeFront (List* list)
 
 void removeBack(List* list)
 {
-	if (!list) return;
-	listNode* tmp = list->front;
+	assert (list);
+	ListNode* tmp = list->front;
 
 	if (tmp == list->back)
 	{

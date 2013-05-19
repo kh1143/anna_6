@@ -3,17 +3,17 @@
 
 struct chTable;
 
-struct listNode
+struct ListNode
 {
 	chTable* data;
-	listNode* next;
+	ListNode* next;
 };
 
 struct List
 {
 	int size;
-	listNode* front;
-	listNode* back;
+	ListNode* front;
+	ListNode* back;
 };
 
 List* createList ();
