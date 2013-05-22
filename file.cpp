@@ -1,25 +1,6 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-<<<<<<< HEAD
-using namespace std;
-
-void readFile(char filename[])
-{
-	int i=0;
-	char file[1024];
-	
-	ifstream r;
-	r.open (filename);
-	
-//	while (r != EOF)
-//	{
-//		r >> file[i];
-//		i++;
-//	}
-	
-	r.close();
-=======
 #include <assert.h>
 using namespace std;
 
@@ -41,17 +22,10 @@ void readFile(char* filename, char str[1024])
 	}   
 	
 	fin.close();
->>>>>>> fd78047... file I/O
 }
 
 void writeFile(char* filename, char* str, int size)
 {
-<<<<<<< HEAD
-	ofstream w;
-	w.open (filename);
-
-	w.close();
-=======
 	ofstream fout (filename, ios_base::out | ios_base::trunc | ios_base::binary);
 
 	if(fout.is_open())
@@ -64,5 +38,4 @@ void writeFile(char* filename, char* str, int size)
 	}  
 	
 	fout.close();
->>>>>>> fd78047... file I/O
 }
