@@ -36,13 +36,13 @@ int getSize (List* list)
 	return list->size;
 }
 
-chTable* getFront (List* list)
+TreeNode* getFront (List* list)
 {
 	assert (list);
 	return list->front->data;
 }
 
-void addBack (List* list, chTable* node)
+void addBack (List* list, TreeNode* node)
 {
 	assert (list);
 	ListNode* n = new ListNode;
@@ -62,7 +62,7 @@ void addBack (List* list, chTable* node)
 	list->size++;
 }
 
-void addFront (List* list, chTable* node)
+void addFront (List* list, TreeNode* node)
 {
 	assert (list);
 	ListNode* n = new ListNode;
@@ -81,7 +81,7 @@ void addFront (List* list, chTable* node)
 	list->size++;
 }
 
-void insert (List* list, chTable* node, int position)
+void insert (List* list, TreeNode* node, int position)
 {
 	assert (list);
 	if (isEmpty(list) || position == 0)

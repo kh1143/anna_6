@@ -1,9 +1,12 @@
 #include <string>
+#include <string.h>
 #include <iostream>
 #include <stdlib.h>
 #include "list.h"
 #include "file.h"
+#include "tree.h"
 #include "huffman.h"
+#include "types.h"
 
 using namespace std;
 
@@ -21,8 +24,36 @@ std::string STUDENT_ID="2011314866";
 
 int main(int argc, char const *argv[])
 {
-	verifyId (STUDENT_ID);	
+	char str[BUF_SIZE] = {0,};
+	List* chlist = createList();
+	Tree* htree = createTree();
+
+	verifyId (STUDENT_ID);
 	clearScreen();
+
+	readFile("test", str);
+	cout << str<<endl;
+
+	MakeTable(chlist, str);
+	displayList(chlist);
+
+/*//	< sort test >
+
+	SortTable(chlist);
+	cout << "after sorted"<<endl;
+	displayList(chlist);
+//*/
+
+
+//	<Huffman Tree Test>
+	MakeHuffmanTree(htree, chlist);
+	displayList(chlist);
+	cout << "htree size: " << htree->size<<endl;
+	cout << "total lenth : "<< strlen(str) << endl;
+	cout << "htree data: ";
+	displayNode(getTreeNode(htree));
+	cout << endl;
+//*/
 
 	while (true)
 	{

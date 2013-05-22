@@ -1,28 +1,16 @@
 #ifndef _TREE_H_
-#define _TREE_H
+#define _TREE_H_
 
-struct chTable;
-
-struct TreeNode
-{
-	chTable data;
-	TreeNode* left;
-	TreeNode* right;
-};
-
-struct Tree
-{
-	TreeNode* root;
-	int size;
-};
-
+#include "types.h"
 
 Tree* createTree ();
+TreeNode* createTreeNode ();
+
 void destroyTree (Tree* tree);
 
-TreeNode* getNode (Tree* tree);
-TreeNode* getLeft (Tree* tree);
-TreeNode* getRight (Tree* tree);
+TreeNode* getTreeNode (Tree* tree);
+TreeNode* getTreeLeft (Tree* tree);
+TreeNode* getTreeRight (Tree* tree);
 
 #endif
 

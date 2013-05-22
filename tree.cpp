@@ -2,6 +2,7 @@
 #include <iostream>
 #include <assert.h>
 #include "list.h"
+#include "tree.h"
 
 using namespace std;
 
@@ -11,11 +12,19 @@ Tree* createTree ()
 	Tree* tree = new Tree;
 	assert (tree);
 
-	tree->root = new TreeNode;
-	assert (tree->node);
-	
-	tree->root->left = tree->root->right = NULL;
+	tree->root = createTreeNode();
 	tree->size = 0;
+
+	return tree;
+}
+
+TreeNode* createTreeNode ()
+{
+	TreeNode* node = new TreeNode;
+	assert (node);
+
+	node->left = node->right = NULL;
+	return node;
 }
 
 void destroyTree (Tree* tree)
@@ -25,21 +34,21 @@ void destroyTree (Tree* tree)
 	delete tree;
 }
 
-TreeNode* getNode (Tree* tree)
+TreeNode* getTreeNode (Tree* tree)
 {
 	assert (tree);
 	return tree->root;
 }
 
-TreeNode* getLeft (Tree* tree)
+TreeNode* getTreeLeft (Tree* tree)
 {
 	assert (tree);
-	return getNode (tree->root->left);
+	return tree->root->left;
 }
 
-TreeNode* getRight (Tree* tree)
+TreeNode* getTreeRight (Tree* tree)
 {
 	assert (tree);
-	return getNode (tree->root->right);
+	return tree->root->right;
 }
 
