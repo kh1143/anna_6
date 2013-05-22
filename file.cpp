@@ -1,12 +1,15 @@
 #include <string>
+#include <string.h>
 #include <iostream>
 #include <fstream>
 #include <assert.h>
+#include "file.h"
+#include "types.h"
+
 using namespace std;
 
-#define BUF_SIZE 1024
 
-void readFile(char* filename, char str[1024])
+void readFile(char* filename, char *str)
 {
 	int i=0;
 
@@ -14,7 +17,7 @@ void readFile(char* filename, char str[1024])
 	
 	if (fin.is_open())
 	{   
-		fin.read(str, 1024);
+		fin.read(str, BUF_SIZE);
 	}   
 	else
 	{   
@@ -24,13 +27,13 @@ void readFile(char* filename, char str[1024])
 	fin.close();
 }
 
-void writeFile(char* filename, char* str, int size)
+void writeFile(char* filename, char* str)
 {
 	ofstream fout (filename, ios_base::out | ios_base::trunc | ios_base::binary);
 
 	if(fout.is_open())
 	{
-		fout.write(str, size);
+		fout.write(str, strlen(str));
 	}   
 	else
 	{   

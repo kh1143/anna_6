@@ -1,9 +1,12 @@
 #include <string>
+#include <string.h>
 #include <iostream>
 #include <stdlib.h>
 #include "list.h"
 #include "file.h"
+#include "tree.h"
 #include "huffman.h"
+#include "types.h"
 
 using namespace std;
 
@@ -21,9 +24,62 @@ std::string STUDENT_ID="2011314866";
 
 int main(int argc, char const *argv[])
 {
-	verifyId (STUDENT_ID);	
+	char str[BUF_SIZE] = {0,};
+	List* list = createList();
+	Tree* tree = createTree();
+	int tablesize;
+	
+
+	verifyId (STUDENT_ID);
 	clearScreen();
 
+	readFile("test", str);
+	cout << str<<endl;
+
+	MakeTable(list, str);
+	displayList(list);
+	tablesize = getListSize(list);
+
+	
+/*//	< sort test >
+
+	SortTable(chlist);
+	cout << "after sorted"<<endl;
+	displayList(chlist);
+//*/
+
+
+//	<Huffman Tree Test>
+
+	MakeHuffmanTree(tree, list);
+	displayList(list);
+	cout << "htree size: " << tree->size<<endl;
+	cout << "total lenth : "<< strlen(str) << endl;
+	cout << "htree data: ";
+	displayNode(getTreeNode(tree));
+	cout << endl;
+//*/
+
+	CodeTable* codetable = new CodeTable[tablesize];
+
+	HuffmanEncode(tree, codetable);
+
+	displayCode(codetable, tablesize);
+	char code[BUF_SIZE*CODE_BUF]={0,};
+	
+	EncodingFile(codetable, tablesize, str, code);
+	cout << code <<endl;
+
+	char decode[BUF_SIZE];
+	DecodingFile(codetable, tablesize, code, decode);
+	cout << decode <<endl;
+
+	writeFile("test.zip", code);
+
+	char ptreestr[BUF_SIZE]={0,};
+	TreeConvertToParenthesisNotaiton(tree, ptreestr);
+	cout << ptreestr<<endl;
+	
 	while (true)
 	{
 		int selection= getMenuSelection();
