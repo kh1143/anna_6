@@ -25,7 +25,6 @@ typedef struct _Tree
 	int size;
 } Tree;
 
-
 typedef struct _ListNode ListNode;
 struct _ListNode
 {
@@ -45,6 +44,5 @@ typedef struct _CodeTable
     char  ch;
     char *code;
 } CodeTable;
-
 
 #endif

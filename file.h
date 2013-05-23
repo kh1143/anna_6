@@ -4,5 +4,4 @@
 void readFile (char* filename, char *str);
 void writeFile(char* filename, char* str);
 
-
 #endif

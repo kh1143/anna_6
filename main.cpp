@@ -29,7 +29,6 @@ int main(int argc, char const *argv[])
 	Tree* tree = createTree();
 	int tablesize;
 	
-
 	verifyId (STUDENT_ID);
 	clearScreen();
 
@@ -40,7 +39,6 @@ int main(int argc, char const *argv[])
 	displayList(list);
 	tablesize = getListSize(list);
 
-	
 /*//	< sort test >
 
 	SortTable(chlist);
