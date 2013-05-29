@@ -27,11 +27,24 @@ TreeNode* createTreeNode ()
 	return node;
 }
 
+void _ProcDestroyTree (TreeNode* root)
+{
+	if (!root->left && !root->right)
+		return;
+
+	_ProcDestroyTree (root->left);
+	_ProcDestroyTree (root->right);
+
+	delete root;
+}
+
 void destroyTree (Tree* tree)
 {
 	assert (tree);
 
+	_ProcDestroyTree (tree->root);
 	delete tree;
+	tree=NULL;
 }
 
 TreeNode* getTreeNode (Tree* tree)
