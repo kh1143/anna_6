@@ -199,12 +199,12 @@ int EncodingBit (char* code, char* ret)
 	return index;
 }
 
-void DecodingBit (char* bitstr, char* ret)
+void DecodingBit (char* bitstr, int bit_len, char* ret)
 {
 	char bit=1, code;
 	int index=0;
 	
-	for (int i=0; i<strlen(bitstr); i++)
+	for (int i=0; i<bit_len; i++)
 	{
 		for (int j=7; j>=0; j--)
 		{

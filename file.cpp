@@ -30,7 +30,7 @@ bool readFile(char* filename, char *str)
 	return true;
 }
 
-CodeTable* readZip(char* filename, int *size, char *str)
+CodeTable* readZip(char* filename, int *size, char *bit, int *bit_len)
 {
 	FILE* file;
 	CodeTable* ct;
@@ -75,8 +75,14 @@ CodeTable* readZip(char* filename, int *size, char *str)
 			return NULL;
 		}
 	}
-
-	if (fread(str, BUF_SIZE, 1, file) == -1)
+	
+	if (fread(bit_len, sizeof(int), 1, file) == -1)
+	{
+		cout << "Failed: Cannot Read str." << endl;
+		fclose (file);
+		return NULL;
+	}
+	if (fread(bit, *bit_len, 1, file) == -1)
 	{
 		cout << "Failed: Cannot Read str." << endl;
 		fclose (file);
@@ -151,7 +157,13 @@ bool writeZip(char* filename, CodeTable *ct, int size, char* bit, int bit_len)
 			return false;
 		}
 	}
-
+	
+	if (fwrite(&bit_len, sizeof(int), 1, file) == -1)
+	{
+		cout << "Failed: Cannot write bit_len." << endl;
+		fclose (file);
+		return false;
+	}
 	if (fwrite(bit, bit_len, 1, file) == -1)
 	{
 		cout << "Failed: Cannot write str." << endl;

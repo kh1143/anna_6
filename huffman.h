@@ -11,7 +11,7 @@ void HuffmanEncode(Tree* tree, CodeTable* ct);
 void EncodingFile (CodeTable* ct, int size, char* str, char* ret);
 void DecodingFile(CodeTable* ct, int size, char* code, char* ret);
 int EncodingBit (char* code, char* ret);
-void DecodingBit (char* bitstr, char* ret);
+void DecodingBit (char* bitstr, int bit_len, char* ret);
 
 
 void TreeConvertToParenthesisNotaiton(Tree* tree, char* ret);

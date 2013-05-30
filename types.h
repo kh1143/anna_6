@@ -1,7 +1,7 @@
 #ifndef _TYPES_H_
 #define _TYPES_H_
 
-#define BUF_SIZE 16384
+#define BUF_SIZE 50000
 #define CODE_BUF 15
 
 typedef struct _chTable

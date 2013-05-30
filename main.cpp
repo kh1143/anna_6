@@ -27,66 +27,6 @@ int main(int argc, char const *argv[])
 	verifyId (STUDENT_ID);
 	clearScreen();
 
-/*//	< read test>
-	char str[BUF_SIZE] = {0,};
-	List* list = createList();
-	Tree* tree = createTree();
-	int tablesize;
-
-	readFile("test", str);
-	cout << str<<endl;
-
-	MakeTable(list, str);
-	displayList(list);
-	tablesize = getListSize(list);
-//*/
-
-
-/*//	<Huffman Tree Test>
-
-	MakeHuffmanTree(tree, list);
-	displayList(list);
-	cout << "htree size: " << tree->size<<endl;
-	cout << "total lenth : "<< strlen(str) << endl;
-	cout << "htree data: ";
-	displayNode(getTreeNode(tree));
-	cout << endl;
-//
-
-	CodeTable* codetable = new CodeTable[tablesize];
-
-	HuffmanEncode(tree, codetable);
-
-	displayCode(codetable, tablesize);
-	char code[BUF_SIZE*CODE_BUF]={0,};
-	
-	EncodingFile(codetable, tablesize, str, code);
-	cout << code <<endl;
-
-	char decode[BUF_SIZE];
-	DecodingFile(codetable, tablesize, code, decode);
-	cout << decode <<endl;
-
-
-	char ptreestr[BUF_SIZE]={0,};
-	TreeConvertToParenthesisNotaiton(tree, ptreestr);
-	cout << ptreestr<<endl;
-
-	char str2[BUF_SIZE];
-	EncodingBit (code, str2);
-	cout << str2 <<endl;
-	
-	writeFile("test.zip", str2);
-	
-	char code2[BUF_SIZE];
-	DecodingBit (str2, code2);
-	cout << code2 << endl;
-
-	char decode2[BUF_SIZE];
-	DecodingFile(codetable, tablesize, code2, decode2);
-	cout << decode2 <<endl;
-//*/
-
 	while (true)
 	{
 		int selection= getMenuSelection();
@@ -98,10 +38,10 @@ int main(int argc, char const *argv[])
 			List* list = NULL;
 			Tree* tree = NULL;
 			char str[BUF_SIZE] = {0,};
-			char code[BUF_SIZE] = {0,};
+			char code[BUF_SIZE*CODE_BUF] = {0,};
 			char bit[BUF_SIZE] = {0,};
-			int size;
-			int bit_len;
+			int size=0;
+			int bit_len=0;
 			CodeTable *codetable = NULL;
 			
 			cout << "Type the name of the file that you want to use" <<endl;
@@ -135,10 +75,11 @@ int main(int argc, char const *argv[])
 			else if (getFileExtension(inputFile) == "zip") // unzip
 			{
 				// File read
-				if (!(codetable = readZip ((char*)inputFile.c_str(), &size, bit)))
+				if (!(codetable = readZip ((char*)inputFile.c_str(),
+											&size, bit, &bit_len)))
 					break;
 
-				DecodingBit (bit, code);					// Convert bit to code
+				DecodingBit (bit, bit_len, code);					// Convert bit to code
 				DecodingFile (codetable, size, code, str);	// Convert code to string
 
 				unzipFile (inputFile, getFileWithoutExtension(inputFile));
