@@ -157,7 +157,7 @@ void DecodingFile(CodeTable* ct, int size, char* code, char* ret)
 	*ret = 0;
 }
 
-void EncodingBit (char* code, char* ret)
+int EncodingBit (char* code, char* ret)
 {
 	char bit = 0;
 	int len  =0, index = 0;
@@ -194,8 +194,9 @@ void EncodingBit (char* code, char* ret)
 		{
 			bit <<= 1;
 		}
-		ret[index] = bit;
+		ret[index++] = bit;
 	}
+	return index;
 }
 
 void DecodingBit (char* bitstr, char* ret)

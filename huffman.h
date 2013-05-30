@@ -10,7 +10,7 @@ void MakeHuffmanTree(Tree* tree, List* list);
 void HuffmanEncode(Tree* tree, CodeTable* ct);
 void EncodingFile (CodeTable* ct, int size, char* str, char* ret);
 void DecodingFile(CodeTable* ct, int size, char* code, char* ret);
-void EncodingBit (char* code, char* ret);
+int EncodingBit (char* code, char* ret);
 void DecodingBit (char* bitstr, char* ret);
 
 

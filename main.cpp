@@ -101,6 +101,7 @@ int main(int argc, char const *argv[])
 			char code[BUF_SIZE] = {0,};
 			char bit[BUF_SIZE] = {0,};
 			int size;
+			int bit_len;
 			CodeTable *codetable = NULL;
 			
 			cout << "Type the name of the file that you want to use" <<endl;
@@ -122,26 +123,24 @@ int main(int argc, char const *argv[])
 				MakeHuffmanTree (tree, list);	 // Make Huffman Tree
 				HuffmanEncode (tree, codetable); // Make Codetable
 				EncodingFile (codetable, size, str, code);	// Convert string to code
-				EncodingBit (code, bit);		 // Convert code to bit
+				bit_len = EncodingBit (code, bit);		 // Convert code to bit
 
 				// File save
 				zipFile (inputFile, inputFile + ".zip");
 				inputFile += ".zip";
-				writeZip ((char*)inputFile.c_str(), codetable, size, bit);
+				writeZip ((char*)inputFile.c_str(), codetable, size, bit, bit_len);
 
 				break;
 			}
 			else if (getFileExtension(inputFile) == "zip") // unzip
 			{
 				// File read
-				if (!(codetable=readZip ((char*)inputFile.c_str(), &size, bit)))
+				if (!(codetable = readZip ((char*)inputFile.c_str(), &size, bit)))
 					break;
 
-				cout << bit;
 				DecodingBit (bit, code);					// Convert bit to code
 				DecodingFile (codetable, size, code, str);	// Convert code to string
 
-				cout << str<<endl;
 				unzipFile (inputFile, getFileWithoutExtension(inputFile));
 				writeFile ((char*)getFileWithoutExtension(inputFile).c_str(), str);
 				break;
