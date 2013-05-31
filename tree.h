@@ -8,9 +8,5 @@ TreeNode* createTreeNode ();
 
 void destroyTree (Tree* tree);
 
-TreeNode* getTreeNode (Tree* tree);
-TreeNode* getTreeLeft (Tree* tree);
-TreeNode* getTreeRight (Tree* tree);
-
 #endif
 
