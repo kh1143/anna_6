@@ -40,9 +40,10 @@ int main(int argc, char const *argv[])
 			char str[BUF_SIZE] = {0,};
 			char code[BUF_SIZE*CODE_BUF] = {0,};
 			char bit[BUF_SIZE] = {0,};
-			int size=0;
+			int table_size=0;
 			int bit_len=0;
 			CodeTable *codetable = NULL;
+			char *treeStr = NULL;
 			
 			cout << "Type the name of the file that you want to use" <<endl;
 			string inputFile;
@@ -58,29 +59,47 @@ int main(int argc, char const *argv[])
 				list = createList();
 				tree = createTree();
 				MakeTable (list, str);			 // Make Frequency Table
-				size = getListSize (list);		 // Get Size
-				codetable = new CodeTable[size]; // dynamic array
+				table_size = getListSize (list);		 // Get Size
+				codetable = new CodeTable[table_size]; // dynamic array
 				MakeHuffmanTree (tree, list);	 // Make Huffman Tree
 				HuffmanEncode (tree, codetable); // Make Codetable
-				EncodingFile (codetable, size, str, code);	// Convert string to code
+				EncodingFile (codetable, table_size, str, code);	// Convert string to code
 				bit_len = EncodingBit (code, bit);		 // Convert code to bit
+				treeStr = TreeConvertToParenthesisNotation (tree); // represent tree to parenthesis notation
+
+				/*/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				
+				displayCode(codetable, size);
+				TreeConvertToParenthesisNotation (tree, treeStr);
+				cout << treeStr<<endl;
+				Tree* decodeTree = createTree();
+				ParenthesisNotationConvertToTree (decodeTree, treeStr);
+				CodeTable *test = new CodeTable[size];
+				HuffmanEncode (decodeTree, test);
+				displayCode(test, size);									
+				///////*//////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 				// File save
 				zipFile (inputFile, inputFile + ".zip");
 				inputFile += ".zip";
-				writeZip ((char*)inputFile.c_str(), codetable, size, bit, bit_len);
+				writeZip ((char*)inputFile.c_str(), treeStr, table_size, bit, bit_len);
 
 				break;
 			}
 			else if (getFileExtension(inputFile) == "zip") // unzip
 			{
 				// File read
-				if (!(codetable = readZip ((char*)inputFile.c_str(),
-											&size, bit, &bit_len)))
+				if (!(treeStr = readZip ((char*)inputFile.c_str(),
+											&table_size, bit, &bit_len)))
 					break;
+				tree = createTree();
+				ParenthesisNotationConvertToTree (tree, treeStr);
+				codetable = new CodeTable[table_size];
+				HuffmanEncode (tree, codetable);
 
 				DecodingBit (bit, bit_len, code);					// Convert bit to code
-				DecodingFile (codetable, size, code, str);	// Convert code to string
+				DecodingFile (codetable, table_size, code, str);	// Convert code to string
 
 				unzipFile (inputFile, getFileWithoutExtension(inputFile));
 				writeFile ((char*)getFileWithoutExtension(inputFile).c_str(), str);
@@ -91,7 +110,7 @@ int main(int argc, char const *argv[])
 			cout <<"Invalid input file"<<endl;
 
 			// Free assigned memory
-			for(int i=0; i<size; i++)
+			for(int i=0; i<table_size; i++)
 				if (codetable[i].code)
 					delete []codetable[i].code;
 			if (codetable)

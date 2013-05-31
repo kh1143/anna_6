@@ -30,50 +30,39 @@ bool readFile(char* filename, char *str)
 	return true;
 }
 
-CodeTable* readZip(char* filename, int *size, char *bit, int *bit_len)
+char* readZip(char* filename, int *table_size, char *bit, int *bit_len)
 {
 	FILE* file;
-	CodeTable* ct;
+	char* treeStr;
+	int len;
 
 	file = fopen(filename, "r+");
 	if(!file)
 	{
 		cout << "Cannot Open File:" << filename<<endl;
-		return false;
+		return NULL;
 	}
 
-	if (fread(size, sizeof(int), 1, file) == -1)
+	if (fread(table_size, sizeof(int), 1, file) == -1)
 	{
-		cout << "Failed: Cannot Read size." << endl;
+		cout << "Failed: Cannot Read table_size." << endl;
 		fclose (file);
-		return false;
+		return NULL;
+	}
+	if (fread(&len, sizeof(int), 1, file) == -1)
+	{
+		cout << "Failed: Cannot Read size len." << endl;
+		fclose (file);
+		return NULL;
 	}
 
-	ct = new CodeTable[*size];
+	treeStr = new char[len + 1];
 
-	for (int i = 0; i<*size; i++)
+	if (fread(treeStr, len, 1, file) == -1)
 	{
-		int len;
-		
-		if (fread(&ct[i], sizeof(CodeTable), 1, file) == -1)
-		{
-			cout << "Failed: Cannot Read size CodeTable." << endl;
-			fclose (file);
-			return NULL;
-		}
-		if (fread(&len, sizeof(int), 1, file) == -1)
-		{
-			cout << "Failed: Cannot Read size len." << endl;
-			fclose (file);
-			return NULL;
-		}
-		ct[i].code = new char[len+1];
-		if (fread(ct[i].code, len, 1, file) == -1)
-		{
-			cout << "Failed: Cannot Read size CodeTable." << endl;
-			fclose (file);
-			return NULL;
-		}
+		cout << "Failed: Cannot Read size treeStr." << endl;
+		fclose (file);
+		return NULL;
 	}
 	
 	if (fread(bit_len, sizeof(int), 1, file) == -1)
@@ -90,7 +79,7 @@ CodeTable* readZip(char* filename, int *size, char *bit, int *bit_len)
 	}
 	fclose (file);
 	
-	return ct;
+	return treeStr;
 }
 
 
@@ -116,9 +105,10 @@ bool writeFile(char* filename, char* str)
 	return true;
 }
 
-bool writeZip(char* filename, CodeTable *ct, int size, char* bit, int bit_len)
+bool writeZip(char* filename, char *treeStr, int table_size, char* bit, int bit_len)
 {
 	FILE* file;
+	int len;
 
 	file = fopen(filename, "w+");
 	if(!file)
@@ -127,36 +117,28 @@ bool writeZip(char* filename, CodeTable *ct, int size, char* bit, int bit_len)
 		return false;
 	}
 
-	if (fwrite(&size, sizeof(int), 1, file) == -1)
+	if (fwrite(&table_size, sizeof(int), 1, file) == -1)
 	{
-		cout << "Failed: Cannot write size." << endl;
+		cout << "Failed: Cannot write table_size." << endl;
 		fclose (file);
 		return false;
 	}
+
+	len = strlen(treeStr);
 	
-	for (int i = 0; i<size; i++)
+	if (fwrite(&len, sizeof(int), 1, file) == -1)
 	{
-		int len = strlen(ct[i].code);
-		
-		if (fwrite(&ct[i], sizeof(CodeTable), 1, file) == -1)
-		{
-			cout << "Failed: Cannot write CodeTable." << endl;
-			fclose (file);
-			return false;
-		}
-		if (fwrite(&len, sizeof(int), 1, file) == -1)
-		{
-			cout << "Failed: Cannot write len." << endl;
-			fclose (file);
-			return false;
-		}
-		if (fwrite(ct[i].code, len, 1, file) == -1)
-		{
-			cout << "Failed: Cannot write CodeTable." << endl;
-			fclose (file);
-			return false;
-		}
+		cout << "Failed: Cannot write len." << endl;
+		fclose (file);
+		return false;
 	}
+	if (fwrite(treeStr, len, 1, file) == -1)
+	{
+		cout << "Failed: Cannot write treeStr." << endl;
+		fclose (file);
+		return false;
+	}
+
 	
 	if (fwrite(&bit_len, sizeof(int), 1, file) == -1)
 	{

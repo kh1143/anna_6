@@ -7,6 +7,7 @@
 #include "tree.h"
 
 using namespace std;
+int ind;
 
 // swap function
 static void _swap(TreeNode** first, TreeNode** second)
@@ -93,7 +94,6 @@ void MakeHuffmanTree(Tree* tree, List* list)
 	}
 }
 
-int ind;
 void _HuffmanEncodeProc(TreeNode* node, CodeTable* ct, char* code, char* pcode)
 {
 	if (!node)
@@ -126,24 +126,24 @@ void HuffmanEncode(Tree* tree, CodeTable* ct)
 	_HuffmanEncodeProc(tree->root, ct, code, code);
 }
 
-void EncodingFile (CodeTable* ct, int size, char* str, char* ret)
+void EncodingFile (CodeTable* ct, int table_size, char* str, char* ret)
 {
 	for(int i=0; i<strlen(str); i++)
-		for(int j=0; j<size; j++)
+		for(int j=0; j<table_size; j++)
 			if(str[i] == ct[j].ch)
 				strncat(ret, ct[j].code, strlen(ct[j].code));
 }
 
-void DecodingFile(CodeTable* ct, int size, char* code, char* ret)
+void DecodingFile(CodeTable* ct, int table_size, char* code, char* ret)
 {
 	int k=0;
 	char cmp[CODE_BUF] ={0,};
-	
+
 	for(int i=0; i<strlen(code); i++)
 	{
 		cmp[k++] = code[i];
 		 
-		for(int j=0; j<size; j++)
+		for(int j=0; j<table_size; j++)
 		{
 			if(strcmp(cmp, ct[j].code) == 0)
 			{
@@ -219,47 +219,84 @@ void DecodingBit (char* bitstr, int bit_len, char* ret)
 	ret[index] = 0;			// remove End mark '1'
 }
 
-static char str[BUF_SIZE]={0,};
-static int i=0;
-void _TreeConvertToParenthesisNotaitonProc(TreeNode* node, char* ret)
+static int flag;
+void _TreeConvertToParenthesisNotationProc(TreeNode* node, char* ret)
 {
-	if(node->table.ch != 0)
+	if(!node)
 		return;
+	if(!node->left && !node->right)
+	{
+		if(flag == 0)
+		    ret[ind++] = node->table.ch;
+		if (flag == 1)
+		    ret[ind++] = node->table.ch;
+		return;
+	}  
 
-	if(node->left->table.ch != 0 && node->right->table.ch != 0)
-	{
-		str[i++] = node->left->table.ch;
-		str[i++] = ',';
-		str[i++] = node->right->table.ch;
-		return;
-	}
-	else if(node->left->table.ch != 0 && node->right->table.ch == 0)
-	{
-		str[i++] = node->left->table.ch;
-		str[i++] = ',';
-		_TreeConvertToParenthesisNotaitonProc(node->right, ret);
-		str[i++] = ')';
-		return;
-	}
-	else
-	{
-		str[i++] = '(';
-		_TreeConvertToParenthesisNotaitonProc(node->left, ret);
-		return;
-	}
+	ret[ind++] = '(';
+	flag = 0;
+	_TreeConvertToParenthesisNotationProc(node->left, ret);
+	flag = 1;
+	ret[ind++] = 1;    // distinct mark
+	_TreeConvertToParenthesisNotationProc(node->right, ret);
+	ret[ind++] = ')';
 }
 
-void TreeConvertToParenthesisNotaiton(Tree* tree, char* ret)
+char* TreeConvertToParenthesisNotation(Tree* tree)
 {
 	assert(tree);
-	_TreeConvertToParenthesisNotaitonProc(tree->root, ret);
-	strcpy(ret, str);	
+	ind = 0;
+	char* str = new char[tree->size * 2];
+	_TreeConvertToParenthesisNotationProc(tree->root, str);
+	
+	return str;
 }
 
-void ParenthesisNotaitonConvertToTree(Tree* tree, char* ret)
+
+void _ProcParenthesisNotationConvertToTree(TreeNode* root, char* treeStr)
 {
-	
+	if (ind >= strlen(treeStr))
+		return;
+
+	if (treeStr[ind] == '(')
+	{   
+		TreeNode* node = createTreeNode();
+		node->table.ch = 0;
+		root->left = node;
+		ind++;
+		_ProcParenthesisNotationConvertToTree(root->left, treeStr);
+	}   
+	else if (treeStr[ind] == 1)
+	{   
+		TreeNode* node = createTreeNode();
+		node->table.ch = 0;
+		root->right = node;
+		ind++;
+		_ProcParenthesisNotationConvertToTree(root->right, treeStr);
+	}   
+	else if (treeStr[ind] == ')')
+	{   
+		ind++;
+		return;
+	}   
+	else
+	{   
+		root->table.ch = treeStr[ind];
+		ind++;
+		return;
+	}   
+	_ProcParenthesisNotationConvertToTree(root, treeStr);
 }
+
+void ParenthesisNotationConvertToTree(Tree* tree, char* treeStr)
+{
+	assert(tree);
+	TreeNode* root = createTreeNode();
+	tree->root = root;
+	ind = 0;
+	_ProcParenthesisNotationConvertToTree(root, treeStr);
+}
+
 
 
 // display code
@@ -267,7 +304,6 @@ void displayCode(CodeTable* ct, int size)
 {
 	for (int i=0; i<size; i++)
 		cout << "ch : " << ct[i].ch << " "<< ct[i].code << endl;
-
 }
 
 // display node
