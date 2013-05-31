@@ -17,10 +17,12 @@ void DecodingBit (char* bitstr, int bit_len, char* ret);
 char* TreeConvertToParenthesisNotation(Tree* tree);
 void ParenthesisNotationConvertToTree(Tree* tree, char* treeStr);
 
-
+/*
+	testing code
+*/
 void displayCode(CodeTable* ct, int size);
 void displayNode(TreeNode* node);
 void displayList(List* list);
-
+ 
 
 #endif

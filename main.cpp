@@ -150,20 +150,26 @@ void zipFile (string inputFile, string outputFile)
 	// Zip text file Using Huffman code
 	list = createList();
 	tree = createTree();
-	MakeTable (list, str);			 // Make Frequency Table
-	table_size = getListSize (list);		 // Get Size
-	codetable = new CodeTable[table_size]; // dynamic array
-	MakeHuffmanTree (tree, list);	 // Make Huffman Tree
-	HuffmanEncode (tree, codetable); // Make Codetable
+	
+	MakeTable (list, str);			 					// Make Frequency Table
+	
+	table_size = getListSize (list);					// Get Size
+	codetable = new CodeTable[table_size]; 				// dynamic array
+	
+	MakeHuffmanTree (tree, list);	 					// Make Huffman Tree
+	HuffmanEncode (tree, codetable); 					// Make Codetable
+	
 	EncodingFile (codetable, table_size, str, code);	// Convert string to code
-	bit_len = EncodingBit (code, bit);		 // Convert code to bit
-	treeStr = TreeConvertToParenthesisNotation (tree); // represent tree to parenthesis notation
+	bit_len = EncodingBit (code, bit);		 			// Convert code to bit
+
+	treeStr = TreeConvertToParenthesisNotation (tree);  // represent tree to parenthesis notation
 
 	cout << "ZIP " << inputFile <<" -> " << outputFile <<endl;
 	inputFile += ".zip";
 
 	writeZip ((char*)inputFile.c_str(), treeStr, table_size, bit, bit_len);
-	FreePointer(list, tree, codetable, table_size);
+	
+	FreePointer(list, tree, codetable, table_size);		// Free memory assignment
 }
 
 void unzipFile (string inputFile, string outputFile)
@@ -183,14 +189,18 @@ void unzipFile (string inputFile, string outputFile)
 		return;
 	
 	tree = createTree();
-	ParenthesisNotationConvertToTree (tree, treeStr);
+	
+	ParenthesisNotationConvertToTree (tree, treeStr);	// Make tree using tree parenthesis notation
+
 	codetable = new CodeTable[table_size];
-	HuffmanEncode (tree, codetable);
+
+	HuffmanEncode (tree, codetable);					// Make codetable
 	
 	DecodingBit (bit, bit_len, code);					// Convert bit to code
 	DecodingFile (codetable, table_size, code, str);	// Convert code to string
 	
 	cout << "UNZIP " << inputFile <<" -> " << outputFile <<endl;
 	writeFile ((char*)getFileWithoutExtension(inputFile).c_str(), str);
-	FreePointer(list, tree, codetable, table_size);
+	
+	FreePointer(list, tree, codetable, table_size);		// Free memory assignment
 }

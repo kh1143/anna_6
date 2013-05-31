@@ -46,22 +46,3 @@ void destroyTree (Tree* tree)
 	delete tree;
 	tree=NULL;
 }
-
-TreeNode* getTreeNode (Tree* tree)
-{
-	assert (tree);
-	return tree->root;
-}
-
-TreeNode* getTreeLeft (Tree* tree)
-{
-	assert (tree);
-	return tree->root->left;
-}
-
-TreeNode* getTreeRight (Tree* tree)
-{
-	assert (tree);
-	return tree->root->right;
-}
-

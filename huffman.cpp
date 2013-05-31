@@ -1,3 +1,15 @@
+/*
+Program : HUFFMAN CODE
+Writer  : Anna Koo (2011314866)
+
+I used ASCII code for distinct mark instead of parenthesis '(' and ')' in tree representation
+	0 : NULL
+	1 : left, same as (
+	2 : right, same as ,
+	3 : end, same as )
+
+*/
+
 #include <iostream>
 #include <string>
 #include <string.h>
@@ -5,9 +17,9 @@
 #include "huffman.h"
 #include "list.h"
 #include "tree.h"
-
 using namespace std;
-int ind;
+
+int ind;	// index
 
 // swap function
 static void _swap(TreeNode** first, TreeNode** second)
@@ -219,35 +231,22 @@ void DecodingBit (char* bitstr, int bit_len, char* ret)
 	ret[index] = 0;			// remove End mark '1'
 }
 
-static int flag;
-void _TreeConvertToParenthesisNotationProc(TreeNode* node, char* ret)
+static void _TreeConvertToParenthesisNotationProc(TreeNode* node, char* ret)
 {
 	if(!node)
 		return;
 	if(!node->left && !node->right)
 	{
-		if(flag == 0)
-		    ret[ind++] = node->table.ch;
-		if (flag == 1)
-		    ret[ind++] = node->table.ch;
+	    ret[ind++] = node->table.ch;
 		return;
 	}  
 
 	ret[ind++] = 1;		// left mark
-	flag = 0;
 	_TreeConvertToParenthesisNotationProc(node->left, ret);
-	flag = 1;
 	ret[ind++] = 2;     // right mark
 	_TreeConvertToParenthesisNotationProc(node->right, ret);
 	ret[ind++] = 3;		// end mark
 }
-/*
-I used ASCII code for distinct mark instead of parenthesis '(' and ')'
-	0 : NULL
-	1 : left, same as (
-	2 : right, same as ,
-	3 : end, same as )
-*/
 
 char* TreeConvertToParenthesisNotation(Tree* tree)
 {
@@ -260,7 +259,7 @@ char* TreeConvertToParenthesisNotation(Tree* tree)
 }
 
 
-void _ProcParenthesisNotationConvertToTree(TreeNode* root, char* treeStr)
+static void _ProcParenthesisNotationConvertToTree(Tree* tree, TreeNode* root, char* treeStr)
 {
 	if (ind >= strlen(treeStr))
 		return;
@@ -268,18 +267,20 @@ void _ProcParenthesisNotationConvertToTree(TreeNode* root, char* treeStr)
 	if (treeStr[ind] == 1)	//left
 	{   
 		TreeNode* node = createTreeNode();
+		tree->size++;
 		node->table.ch = 0;
 		root->left = node;
 		ind++;
-		_ProcParenthesisNotationConvertToTree(root->left, treeStr);
+		_ProcParenthesisNotationConvertToTree(tree, root->left, treeStr);
 	}   
 	else if (treeStr[ind] == 2)	//right
 	{   
 		TreeNode* node = createTreeNode();
+		tree->size++;
 		node->table.ch = 0;
 		root->right = node;
 		ind++;
-		_ProcParenthesisNotationConvertToTree(root->right, treeStr);
+		_ProcParenthesisNotationConvertToTree(tree, root->right, treeStr);
 	}   
 	else if (treeStr[ind] == 3)	//end
 	{   
@@ -292,7 +293,7 @@ void _ProcParenthesisNotationConvertToTree(TreeNode* root, char* treeStr)
 		ind++;
 		return;
 	}   
-	_ProcParenthesisNotationConvertToTree(root, treeStr);
+	_ProcParenthesisNotationConvertToTree(tree, root, treeStr);
 }
 
 void ParenthesisNotationConvertToTree(Tree* tree, char* treeStr)
@@ -300,12 +301,15 @@ void ParenthesisNotationConvertToTree(Tree* tree, char* treeStr)
 	assert(tree);
 	TreeNode* root = createTreeNode();
 	tree->root = root;
+	tree->size++;
 	ind = 0;
-	_ProcParenthesisNotationConvertToTree(root, treeStr);
+	_ProcParenthesisNotationConvertToTree(tree, root, treeStr);
 }
 
 
-
+/* 
+	Testing code
+*/
 // display code
 void displayCode(CodeTable* ct, int size)
 {
