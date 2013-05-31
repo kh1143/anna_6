@@ -233,14 +233,21 @@ void _TreeConvertToParenthesisNotationProc(TreeNode* node, char* ret)
 		return;
 	}  
 
-	ret[ind++] = '(';
+	ret[ind++] = 1;		// left mark
 	flag = 0;
 	_TreeConvertToParenthesisNotationProc(node->left, ret);
 	flag = 1;
-	ret[ind++] = 1;    // distinct mark
+	ret[ind++] = 2;     // right mark
 	_TreeConvertToParenthesisNotationProc(node->right, ret);
-	ret[ind++] = ')';
+	ret[ind++] = 3;		// end mark
 }
+/*
+I used ASCII code for distinct mark instead of parenthesis '(' and ')'
+	0 : NULL
+	1 : left, same as (
+	2 : right, same as ,
+	3 : end, same as )
+*/
 
 char* TreeConvertToParenthesisNotation(Tree* tree)
 {
@@ -258,7 +265,7 @@ void _ProcParenthesisNotationConvertToTree(TreeNode* root, char* treeStr)
 	if (ind >= strlen(treeStr))
 		return;
 
-	if (treeStr[ind] == '(')
+	if (treeStr[ind] == 1)	//left
 	{   
 		TreeNode* node = createTreeNode();
 		node->table.ch = 0;
@@ -266,7 +273,7 @@ void _ProcParenthesisNotationConvertToTree(TreeNode* root, char* treeStr)
 		ind++;
 		_ProcParenthesisNotationConvertToTree(root->left, treeStr);
 	}   
-	else if (treeStr[ind] == 1)
+	else if (treeStr[ind] == 2)	//right
 	{   
 		TreeNode* node = createTreeNode();
 		node->table.ch = 0;
@@ -274,7 +281,7 @@ void _ProcParenthesisNotationConvertToTree(TreeNode* root, char* treeStr)
 		ind++;
 		_ProcParenthesisNotationConvertToTree(root->right, treeStr);
 	}   
-	else if (treeStr[ind] == ')')
+	else if (treeStr[ind] == 3)	//end
 	{   
 		ind++;
 		return;
