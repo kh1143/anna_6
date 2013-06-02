@@ -106,67 +106,69 @@ void MakeHuffmanTree(Tree* tree, List* list)
 	}
 }
 
-void _HuffmanEncodeProc(TreeNode* node, CodeTable* ct, char* code, char* pcode)
+static void 
+_ProcEncodingFile (TreeNode* node, char ch, char* code, char* pcode, char** ret)
 {
-	if (!node)
+	if(!node)
 		return;
 	else if (!node->left && !node->right)
 	{
-		*pcode = '\0';
-		ct[ind].ch = node->table.ch;
-		ct[ind].code = new char[strlen(code)+1];
-		assert(ct[ind].code);
-		strncpy(ct[ind++].code, code, strlen(code)+1);
+		if (node->table.ch == ch)
+		{
+			*pcode = '\0';
+			*ret = new char[strlen(code+1)];
+			assert (*ret);
+			strncpy(*ret, code, strlen(code)+1);
+		}
 	}
 	else
 	{
 		*pcode='0';
-		_HuffmanEncodeProc(node->left, ct, code, pcode+1);
+		_ProcEncodingFile (node->left, ch, code, pcode+1, ret);
 		*pcode='1';
-		_HuffmanEncodeProc(node->right, ct, code, pcode+1);
+		_ProcEncodingFile (node->right, ch, code, pcode+1, ret);
 	}
 }
 
-void HuffmanEncode(Tree* tree, CodeTable* ct)
+void EncodingFile (Tree* tree, char* str, char* ret)
 {
-	assert(tree);
-	assert(ct);
+	int index = 0;
+	int len = 0;
+	char *pcode;
 
-	char code[CODE_BUF] = {0,};
-	ind = 0;
-
-	_HuffmanEncodeProc(tree->root, ct, code, code);
-}
-
-void EncodingFile (CodeTable* ct, int table_size, char* str, char* ret)
-{
 	for(int i=0; i<strlen(str); i++)
-		for(int j=0; j<table_size; j++)
-			if(str[i] == ct[j].ch)
-				strncat(ret, ct[j].code, strlen(ct[j].code));
+	{
+		char code[CODE_BUF] = {0,};
+		ind = 0;
+		pcode = NULL;
+		
+		_ProcEncodingFile(tree->root, str[i], code, code, &pcode);
+		strncat(ret, pcode, strlen(pcode));
+		len += strlen(pcode);
+	}
+	ret[len] = 0;
+
 }
 
-void DecodingFile(CodeTable* ct, int table_size, char* code, char* ret)
+void DecodingFile(Tree* tree, char* code, char* ret)
 {
-	int k=0;
-	char cmp[CODE_BUF] ={0,};
+	int index = 0;
+	TreeNode* node = tree->root;
 
 	for(int i=0; i<strlen(code); i++)
 	{
-		cmp[k++] = code[i];
-		 
-		for(int j=0; j<table_size; j++)
+		if (code[i] == '0')
+			node = node->left;
+		else if (code[i] == '1')
+			node = node->right;
+
+		if (!node->left && !node->right)
 		{
-			if(strcmp(cmp, ct[j].code) == 0)
-			{
-				*ret = ct[j].ch;
-				ret++;
-				memset(cmp, 0, sizeof(cmp));
-				k=0;
-			}
+			ret[index++] = node->table.ch;
+			node = tree->root;
 		}
 	}
-	*ret = 0;
+	ret[index] = 0;
 }
 
 int EncodingBit (char* code, char* ret)
@@ -310,13 +312,6 @@ void ParenthesisNotationConvertToTree(Tree* tree, char* treeStr)
 /* 
 	Testing code
 */
-// display code
-void displayCode(CodeTable* ct, int size)
-{
-	for (int i=0; i<size; i++)
-		cout << "ch : " << ct[i].ch << " "<< ct[i].code << endl;
-}
-
 // display node
 void displayNode(TreeNode* node)
 {

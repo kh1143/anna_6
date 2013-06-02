@@ -30,7 +30,7 @@ bool readFile(char* filename, char *str)
 	return true;
 }
 
-char* readZip(char* filename, int *table_size, char *bit, int *bit_len)
+char* readZip(char* filename, char *bit, int *bit_len)
 {
 	FILE* file;
 	char* treeStr;
@@ -43,12 +43,6 @@ char* readZip(char* filename, int *table_size, char *bit, int *bit_len)
 		return NULL;
 	}
 
-	if (fread(table_size, sizeof(int), 1, file) == -1)
-	{
-		cout << "Failed: Cannot Read table_size." << endl;
-		fclose (file);
-		return NULL;
-	}
 	if (fread(&len, sizeof(int), 1, file) == -1)
 	{
 		cout << "Failed: Cannot Read size len." << endl;
@@ -105,7 +99,7 @@ bool writeFile(char* filename, char* str)
 	return true;
 }
 
-bool writeZip(char* filename, char *treeStr, int table_size, char* bit, int bit_len)
+bool writeZip(char* filename, char *treeStr, char* bit, int bit_len)
 {
 	FILE* file;
 	int len;
@@ -114,13 +108,6 @@ bool writeZip(char* filename, char *treeStr, int table_size, char* bit, int bit_
 	if(!file)
 	{
 		cout << "Cannot Open File:" << filename<<endl;
-		return false;
-	}
-
-	if (fwrite(&table_size, sizeof(int), 1, file) == -1)
-	{
-		cout << "Failed: Cannot write table_size." << endl;
-		fclose (file);
 		return false;
 	}
 

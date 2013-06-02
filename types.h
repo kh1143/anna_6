@@ -39,10 +39,4 @@ typedef struct _List
 	ListNode* back;
 } List;
 
-typedef struct _CodeTable
-{
-    char  ch;
-    char *code;
-} CodeTable;
-
 #endif
