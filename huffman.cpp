@@ -106,8 +106,7 @@ void MakeHuffmanTree(Tree* tree, List* list)
 	}
 }
 
-static void 
-_ProcEncodingFile (TreeNode* node, char ch, char* code, char* pcode, char** ret)
+static void _ProcEncodingFile (TreeNode* node, char ch, char* code, char* pcode, char** ret)
 {
 	if(!node)
 		return;
@@ -124,9 +123,9 @@ _ProcEncodingFile (TreeNode* node, char ch, char* code, char* pcode, char** ret)
 	else
 	{
 		*pcode='0';
-		_ProcEncodingFile (node->left, ch, code, pcode+1, ret);
+		_ProcEncodingFile (node->left, ch, code, pcode+1, ret);		// left
 		*pcode='1';
-		_ProcEncodingFile (node->right, ch, code, pcode+1, ret);
+		_ProcEncodingFile (node->right, ch, code, pcode+1, ret);	// right
 	}
 }
 
@@ -306,27 +305,4 @@ void ParenthesisNotationConvertToTree(Tree* tree, char* treeStr)
 	tree->size++;
 	ind = 0;
 	_ProcParenthesisNotationConvertToTree(tree, root, treeStr);
-}
-
-
-/* 
-	Testing code
-*/
-// display node
-void displayNode(TreeNode* node)
-{
-	assert(node);
-	cout << "ch : " << node->table.ch <<
-				" frequency : " << node->table.frequency << endl;
-}
-
-// display all list node
-void displayList(List* list)
-{
-	assert(list);
-	for(ListNode* n = list->front; n != NULL; n = n->next)
-	{
-		displayNode(n->data);
-	}
-	cout <<"List Size : "<<list->size<<endl;
 }
