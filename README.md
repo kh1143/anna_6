@@ -1,4 +1,4 @@
-# huffman code
+# Huffman code
 
 Huffman Algorithm
 
