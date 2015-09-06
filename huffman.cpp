@@ -1,16 +1,18 @@
-/*
-Program : HUFFMAN CODE
-Writer  : Anna Koo (2011314866)
-
-I used ASCII code for distinct mark instead of parenthesis '(' and ')' in tree representation
-	0 : NULL
-	1 : left, same as (
-	2 : right, same as ,
-	3 : end, same as )
-
-git test
- 
-*/
+/* ==================================================================
+ * File:  /huffman/huffman.cpp
+ *
+ * Brief: Huffman code algorithm 
+ * Desc:  I used ASCII code for distinct mark instead of parenthesis 
+ *        '(' and ')' in tree representation
+ *          -  0 : NULL
+ *          -  1 : left, same as (
+ *          -  2 : right, same as ,
+ *          -  3 : end, same as )
+ *
+ * Author: Andrew Heebum Kwak (kh-1143@hanmail.net)
+ * Date:   2013-06-06
+ * ==================================================================
+ */
 
 #include <iostream>
 #include <string>
@@ -200,17 +202,17 @@ int EncodingBit (char* code, char* ret)
 		}
 	}
 	
-	if (len != 0)
-	{
-		bit <<= 1;
-		bit |= 1;	// End mark
-		len++;
-		for(; len != 8; len++)
-		{
-			bit <<= 1;
-		}
-		ret[index++] = bit;
-	}
+    bit <<= 1;
+    bit |= 1;	// End mark
+    len++;
+
+    for(; len != 8; len++)
+    {
+        bit <<= 1;
+    }
+
+    ret[index++] = bit;
+
 	return index;
 }
 

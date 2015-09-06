@@ -7,7 +7,7 @@ SOURCES= main.cpp \
 		 huffman.cpp \
 		 tree.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE= hw6
+EXECUTABLE= huffman
 
 all: $(SOURCES) $(EXECUTABLE)
 	

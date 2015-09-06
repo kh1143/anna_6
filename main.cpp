@@ -1,3 +1,14 @@
+/* ==================================================================
+ * File:  /huffman/main.cpp
+ *
+ * Brief: Huffman code algorithm
+ * Desc:  Zip & Unzip test program
+ *
+ * Author: Andrew Heebum Kwak (kh-1143@hanmail.net)
+ * Date:   2013-06-06
+ * ==================================================================
+ */
+
 #include <string>
 #include <string.h>
 #include <iostream>
@@ -10,7 +21,6 @@
 
 using namespace std;
 
-void verifyId(string id);
 void clearScreen();
 int getMenuSelection ();
 string getFileExtension(string filename);
@@ -19,12 +29,8 @@ void zipFile (string inputFile, string outputFile);
 void unzipFile (string inputFile, string outputFile);
 
 
-std::string STUDENT_ID="2011314866";
-
-
 int main(int argc, char const *argv[])
 {
-	verifyId (STUDENT_ID);
 	clearScreen();
 
 	while (true)
@@ -58,17 +64,6 @@ int main(int argc, char const *argv[])
 	return 0;
 }
 
-
-
-// SOME HELPER FUNCTIONS
-void verifyId(string id)
-{
-    if (id=="PUT ONLY YOUR ID HERE")
-    {
-        cout << "\nInsert your ID first"<<endl;
-        exit(1);
-    }
-}
 
 void clearScreen()
 {
